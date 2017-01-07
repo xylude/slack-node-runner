@@ -31,12 +31,19 @@ attachChildListeners(child);
 
 const token = config.slack_token;
 
-const deentitize = function(str) {
-    var ret = str.replace(/&gt;/g, '>');
-    ret = ret.replace(/&lt;/g, '<');
-    ret = ret.replace(/&quot;/g, '"');
-    ret = ret.replace(/&apos;/g, "'");
-    ret = ret.replace(/&amp;/g, '&');
+const cleanup = function(str) {
+    var ret = str
+        .replace(/&gt;/g, '>')
+        .replace(/&lt;/g, '<')
+        .replace(/&quot;/g, '"')
+        .replace(/&apos;/g, "'")
+        .replace(/&amp;/g, '&')
+        .replace(/\r?\n|\r/g,'')
+        .replace(/”/g, '"')
+        .replace(/“/g, '"')
+        .replace(/`/g, "'")
+        .replace(/’/g,"'")
+        .replace(/‘/g, "'");
     return ret;
 };
 
@@ -59,13 +66,7 @@ controller.on('direct_mention', (bot, message) => {
             child.kill();
             break;
         default:
-            const exp = deentitize(message.text)
-                .replace(/\r?\n|\r/g,'')
-                .replace(/”/g, '"')
-                .replace(/“/g, '"')
-                .replace(/`/g, "'")
-                .replace(/’/g,"'")
-                .replace(/‘/g, "'");
+            const exp = cleanup(message.text);
 
             console.log('evaluating '+exp);
             try {
