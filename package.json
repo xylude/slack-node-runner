@@ -10,7 +10,6 @@
   "license": "ISC",
   "dependencies": {
     "botkit": "^0.4.9",
-    "immutable": "^3.8.1",
     "slack": "^8.1.2"
   }
 }

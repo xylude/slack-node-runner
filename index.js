@@ -61,7 +61,11 @@ controller.on('hello', function(bot, data) {
 })
 
 controller.on('direct_mention', (bot, message) => {
-    switch(message.text) {
+    const {text} = message;
+
+    // const hasBadRequires = config.ignore_requires_from.filter(require => require)
+
+    switch(text) {
         case '*reset':
             child.kill();
             break;
