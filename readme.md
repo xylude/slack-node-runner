@@ -18,6 +18,6 @@ and invite the bot to the channel you want to interact with it from.
 Deploy this application to a server of your choosing, once it's running 
 you can interact with it by typing @your-bots-name commands followed by javascript.
 
-NOTE: Any packages you add to package.json will be available to the node bot since it runs in the 
+NOTE: Any packages (with the exeption of ones added to the ignore_modules option in the config file) you add to package.json will be available to the node bot since it runs in the 
 same context as the server. This lets you add packages that the node-bot can interact with.
 
