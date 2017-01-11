@@ -21,3 +21,6 @@ you can interact with it by typing @your-bots-name commands followed by javascri
 NOTE: Any packages (with the exeption of ones added to the ignore_modules option in the config file) you add to package.json will be available to the node bot since it runs in the 
 same context as the server. This lets you add packages that the node-bot can interact with.
 
+TODOS: 
+
+1. Add bot token to a .env file that can be stored in a separate directory
