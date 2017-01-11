@@ -1,6 +1,6 @@
 var Botkit = require('botkit');
 var config = require('./config');
-var entities = require('html-entities');
+var entities = require('entities');
 
 var spawn = require('child_process').spawn;
 var child = spawn('node',['-i']);
@@ -34,7 +34,7 @@ attachChildListeners(child);
 const token = config.slack_token;
 
 const cleanup = function(str) {
-    var ret = entities.decode(str)
+    var ret = entities.decodeHTML(str)
         .replace(/\r?\n|\r/g,'')
         .replace(/”/g, '"')
         .replace(/“/g, '"')
