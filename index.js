@@ -62,22 +62,25 @@ controller.on('hello', function(bot, data) {
 
 controller.on('direct_mention', (bot, message) => {
     const {text} = message;
+    var expstr = "require\\(('|\")("+config.ignore_modules.join('|')+")('|\")\\)";
+    var exp = new RegExp(expstr, "ig");
+    var messageText = cleanup(text);
 
-    // const hasBadRequires = config.ignore_requires_from.filter(require => require)
-
-    switch(text) {
-        case '*reset':
-            child.kill();
-            break;
-        default:
-            const exp = cleanup(message.text);
-
-            console.log('evaluating '+exp);
-            try {
-                child.stdin.write(exp+"\n");
-            } catch(e) {
-                console.log(e);
-                bot.reply(message, e.message);
-            }
+    if(messageText.match(exp)) {
+        bot.reply(message, "You cannot require that module!");
+    } else {
+        switch(messageText) {
+            case '*reset':
+                child.kill();
+                break;
+            default:
+                console.log('evaluating '+messageText);
+                try {
+                    child.stdin.write(messageText+"\n");
+                } catch(e) {
+                    console.log(e);
+                    bot.reply(message, e.message);
+                }
+        }
     }
 })
