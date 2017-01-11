@@ -31,12 +31,19 @@ attachChildListeners(child);
 
 const token = config.slack_token;
 
-const deentitize = function(str) {
-    var ret = str.replace(/&gt;/g, '>');
-    ret = ret.replace(/&lt;/g, '<');
-    ret = ret.replace(/&quot;/g, '"');
-    ret = ret.replace(/&apos;/g, "'");
-    ret = ret.replace(/&amp;/g, '&');
+const cleanup = function(str) {
+    var ret = str
+        .replace(/&gt;/g, '>')
+        .replace(/&lt;/g, '<')
+        .replace(/&quot;/g, '"')
+        .replace(/&apos;/g, "'")
+        .replace(/&amp;/g, '&')
+        .replace(/\r?\n|\r/g,'')
+        .replace(/”/g, '"')
+        .replace(/“/g, '"')
+        .replace(/`/g, "'")
+        .replace(/’/g,"'")
+        .replace(/‘/g, "'");
     return ret;
 };
 
@@ -54,25 +61,26 @@ controller.on('hello', function(bot, data) {
 })
 
 controller.on('direct_mention', (bot, message) => {
-    switch(message.text) {
-        case '*reset':
-            child.kill();
-            break;
-        default:
-            const exp = deentitize(message.text)
-                .replace(/\r?\n|\r/g,'')
-                .replace(/”/g, '"')
-                .replace(/“/g, '"')
-                .replace(/`/g, "'")
-                .replace(/’/g,"'")
-                .replace(/‘/g, "'");
+    const {text} = message;
+    var expstr = "require\\(('|\")("+config.ignore_modules.join('|')+")('|\")\\)";
+    var exp = new RegExp(expstr, "ig");
+    var messageText = cleanup(text);
 
-            console.log('evaluating '+exp);
-            try {
-                child.stdin.write(exp+"\n");
-            } catch(e) {
-                console.log(e);
-                bot.reply(message, e.message);
-            }
+    if(messageText.match(exp)) {
+        bot.reply(message, "You cannot require that module!");
+    } else {
+        switch(messageText) {
+            case '*reset':
+                child.kill();
+                break;
+            default:
+                console.log('evaluating '+messageText);
+                try {
+                    child.stdin.write(messageText+"\n");
+                } catch(e) {
+                    console.log(e);
+                    bot.reply(message, e.message);
+                }
+        }
     }
 })
