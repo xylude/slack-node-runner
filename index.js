@@ -1,6 +1,9 @@
 var Botkit = require('botkit');
 var config = require('./config');
 var entities = require('entities');
+var env = require('node-env-file');
+
+env(config.environment_file_location);
 
 var spawn = require('child_process').spawn;
 var child = spawn('node',['-i']);
@@ -31,7 +34,7 @@ const attachChildListeners = (c) => {
 
 attachChildListeners(child);
 
-const token = config.slack_token;
+const token = process.env.SLACK_BOT_TOKEN;
 
 const cleanup = function(str) {
     var ret = entities.decodeHTML(str)
