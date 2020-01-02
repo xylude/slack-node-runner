@@ -1,8 +1,8 @@
-#Node Slack Bot
+# Node Slack Bot
 
 This is a slack bot that runs node commands in the channel of your choosing.
 
-#Setup
+# Setup
 
 Set up a new bot user on Slack, then invite it to a channel.
 You can read more on setting up bot users here:
